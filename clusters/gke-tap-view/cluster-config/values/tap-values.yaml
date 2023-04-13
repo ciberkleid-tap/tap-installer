@@ -1,39 +1,42 @@
-profile: view
-ceip_policy_disclosed: true # Installation fails if this is not set to true. Not a string.
+---
+tap_install:
+  values:
+    profile: view
+    ceip_policy_disclosed: true # Installation fails if this is not set to true. Not a string.
 
-shared:
-  ingress_domain: "view.tap-demo.coraiberkleid.net"
-  kubernetes_version: "1.24"
+    shared:
+      ingress_domain: "view.tap-demo.coraiberkleid.net"
+      kubernetes_version: "1.24"
 
-contour:
-  envoy:
-    service:
-      type: LoadBalancer # NodePort can be used if your Kubernetes cluster doesn't support LoadBalancing.
+    contour:
+      envoy:
+        service:
+          type: LoadBalancer # NodePort can be used if your Kubernetes cluster doesn't support LoadBalancing.
 
-tap_gui:
-  ingressEnabled: true
-  service_type: ClusterIP
-  app_config:
-    catalog:
-      locations:
-        - type: url
-          target: https://github.com/ciberkleid/tap-gui-catalog/blob/main/catalog-info.yaml
-    # kubernetes:
-    #   serviceLocatorMethod:
-    #     type: 'multiTenant'
-    #   clusterLocatorMethods:
-    #     - type: 'config'
-    #       clusters:
-    #         - url: CLUSTER-URL
-    #           name: CLUSTER-NAME # Build profile cluster can go here.
-    #           authProvider: serviceAccount
-    #           serviceAccountToken: CLUSTER-TOKEN
-    #           skipTLSVerify: TRUE-OR-FALSE-VALUE
-    #         - url: CLUSTER-URL
-    #           name: CLUSTER-NAME # Run profile cluster can go here.
-    #           authProvider: serviceAccount
-    #           serviceAccountToken: CLUSTER-TOKEN
-    #           skipTLSVerify: TRUE-OR-FALSE-VALUE
+    tap_gui:
+      ingressEnabled: true
+      service_type: ClusterIP
+      app_config:
+        catalog:
+          locations:
+            - type: url
+              target: https://github.com/ciberkleid/tap-gui-catalog/blob/main/catalog-info.yaml
+        # kubernetes:
+        #   serviceLocatorMethod:
+        #     type: 'multiTenant'
+        #   clusterLocatorMethods:
+        #     - type: 'config'
+        #       clusters:
+        #         - url: CLUSTER-URL
+        #           name: CLUSTER-NAME # Build profile cluster can go here.
+        #           authProvider: serviceAccount
+        #           serviceAccountToken: CLUSTER-TOKEN
+        #           skipTLSVerify: TRUE-OR-FALSE-VALUE
+        #         - url: CLUSTER-URL
+        #           name: CLUSTER-NAME # Run profile cluster can go here.
+        #           authProvider: serviceAccount
+        #           serviceAccountToken: CLUSTER-TOKEN
+        #           skipTLSVerify: TRUE-OR-FALSE-VALUE
 
-appliveview:
-  ingressEnabled: true
+    appliveview:
+      ingressEnabled: true
