@@ -6,7 +6,7 @@ tap_install:
 
     shared:
       ingress_domain: "view.tap-demo.coraiberkleid.net"
-      kubernetes_version: "1.24"
+      ingress_issuer: ""
 
     contour:
       envoy:
@@ -40,3 +40,5 @@ tap_install:
 
     appliveview:
       ingressEnabled: true
+
+  # Might need to tell GUI to access Grype metadata store on build cluster
