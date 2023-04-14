@@ -1,0 +1,50 @@
+---
+tap_install:
+  values:
+    profile: iterate
+    ceip_policy_disclosed: true # Installation fails if this is not set to true. Not a string.
+
+    shared:
+      ingress_domain: "iterate.tap-demo.coraiberkleid.net"
+      
+      image_registry:
+        project_path: "us-central1-docker.pkg.dev/fe-ciberkleid/tap-demo" # To be used by Build Service by appending "/buildservice" and used by Supply chain by appending "/workloads"
+        secret:
+          name: "registry_credentials"
+          namespace: "tap-install"
+
+    # The above shared keys may be overridden in the below section.
+
+    buildservice:
+    # Takes the value from the shared section by default, but can be overridden by setting a different value.
+      # kp_default_repository: "KP-DEFAULT-REPO"
+      # kp_default_repository_secret:
+      #   name: "KP-DEFAULT-REPO-SECRET"
+      #   namespace: "KP-DEFAULT-REPO-SECRET-NAMESPACE"
+
+    supply_chain: basic
+    ootb_supply_chain_basic: # Optional if the shared above mentioned shared keys are provided.
+      # registry:
+      #   server: "SERVER-NAME"
+      #   repository: "REPO-NAME"
+      gitops:
+        ssh_secret: "git-ssh" # (Optional) Defaults to "".
+
+    image_policy_webhook:
+      allow_unmatched_tags: true
+
+    contour:
+      envoy:
+        service:
+          type: LoadBalancer # (Optional) Defaults to LoadBalancer.
+
+    cnrs:
+      # domain_name: "TAP-ITERATE-CNRS-DOMAIN" # Optional if the shared.ingress_domain is provided.
+      default_tls_secret: contour-tls/tls
+      domain_template: "{{.Name}}-{{.Namespace}}.{{.Domain}}"
+
+    appliveview_connector:
+      backend:
+        sslDeactivated: false
+        ingressEnabled: true
+        host: appliveview.view.tap-demo.coraiberkleid.net
