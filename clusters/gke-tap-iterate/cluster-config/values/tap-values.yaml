@@ -9,9 +9,6 @@ tap_install:
       
       image_registry:
         project_path: "us-central1-docker.pkg.dev/fe-ciberkleid/tap-demo" # To be used by Build Service by appending "/buildservice" and used by Supply chain by appending "/workloads"
-        secret:
-          name: "registry_credentials"
-          namespace: "tap-install"
 
     # The above shared keys may be overridden in the below section.
 
