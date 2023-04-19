@@ -35,12 +35,12 @@ tap_install:
     namespace_provisioner:
       controller: false
       gitops_install:
-        url: https://github.com/ciberkleid/tap-gitops
+        url: https://github.com/ciberkleid-tap/tap-installer
         ref: origin/main
         subPath: clusters/gke-tap-build/cluster-config/namespace-provisioner/namespaces
       additional_sources:
         - git:
-            url: https://github.com/ciberkleid/tap-gitops
+            url: https://github.com/ciberkleid-tap/tap-installer
             ref: origin/main
             subPath: clusters/gke-tap-build/cluster-config/namespace-provisioner/namespace-resources
           path: _ytt_lib/namespace-resources
