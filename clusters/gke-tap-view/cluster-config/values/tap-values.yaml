@@ -20,7 +20,7 @@ tap_install:
         catalog:
           locations:
             - type: url
-              target: https://github.com/ciberkleid/tap-gui-catalog/blob/main/catalog-info.yaml
+              target: https://github.com/ciberkleid-tap/tap-catalog/blob/main/catalog-info.yaml
         # kubernetes:
         #   serviceLocatorMethod:
         #     type: 'multiTenant'
