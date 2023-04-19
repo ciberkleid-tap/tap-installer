@@ -1,0 +1,48 @@
+---
+tap_install:
+  values:
+    profile: run
+    ceip_policy_disclosed: true # Installation fails if this is not set to true. Not a string.
+
+    shared:
+      ingress_domain: "run-secondary.tap-demo.coraiberkleid.net"
+      ingress_issuer: ""
+
+    supply_chain: basic
+
+    contour:
+      envoy:
+        service:
+          type: LoadBalancer # NodePort can be used if your Kubernetes cluster doesn't support LoadBalancing.
+
+    cnrs:
+      # domain_name: "TAP-ITERATE-CNRS-DOMAIN" # Optional if the shared.ingress_domain is provided.
+      default_tls_secret: contour-tls/tls
+      domain_template: "{{.Name}}-{{.Namespace}}.{{.Domain}}"
+
+    appliveview_connector:
+      backend:
+        sslDeactivated: false
+        ingressEnabled: true
+        host: appliveview.view.tap-demo.coraiberkleid.net
+
+    namespace_provisioner:
+      controller: false
+      gitops_install:
+        url: https://github.com/ciberkleid/tap-gitops
+        ref: origin/main
+        subPath: clusters/gke-tap-run-secondary/cluster-config/namespace-provisioner/namespaces
+      additional_sources:
+        - git:
+            url: https://github.com/ciberkleid/tap-gitops
+            ref: origin/main
+            subPath: clusters/gke-tap-run-secondary/cluster-config/namespace-provisioner/namespace-resources
+          path: _ytt_lib/namespace-resources
+      import_data_values_secrets:
+        - name: workload-git-auth
+          namespace: tap-install
+          create_export: true
+      overlay_secrets:
+        - name: workload-git-auth-overlay
+          namespace: tap-install
+          create_export: true

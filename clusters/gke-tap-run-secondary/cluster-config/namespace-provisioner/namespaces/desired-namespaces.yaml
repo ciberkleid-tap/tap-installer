@@ -1,0 +1,5 @@
+#@data/values
+---
+namespaces:
+  - name: dev-one
+  - name: dev-two
