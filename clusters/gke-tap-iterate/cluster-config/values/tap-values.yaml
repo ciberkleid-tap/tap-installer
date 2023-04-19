@@ -46,3 +46,24 @@ tap_install:
         sslDeactivated: false
         ingressEnabled: true
         host: appliveview.view.tap-demo.coraiberkleid.net
+
+    namespace_provisioner:
+      controller: false
+      gitops_install:
+        url: https://github.com/ciberkleid/tap-gitops
+        ref: origin/main
+        subPath: clusters/gke-tap-iterate/cluster-config/namespace-provisioner/namespaces
+      additional_sources:
+        - git:
+            url: https://github.com/ciberkleid/tap-gitops
+            ref: origin/main
+            subPath: clusters/gke-tap-iterate/cluster-config/namespace-provisioner/namespace-resources
+          path: _ytt_lib/namespace-resources
+      import_data_values_secrets:
+        - name: workload-git-auth
+          namespace: tap-install
+          create_export: true
+      overlay_secrets:
+        - name: workload-git-auth-overlay
+          namespace: tap-install
+          create_export: true
