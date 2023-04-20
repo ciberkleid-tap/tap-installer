@@ -67,6 +67,3 @@ tap_install:
         - name: workload-git-auth-overlay
           namespace: tap-install
           create_export: true
-        - name: registry-credentials-overlay
-          namespace: tap-install
-          create_export: true
