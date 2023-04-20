@@ -63,6 +63,9 @@ tap_install:
         - name: workload-git-auth
           namespace: tap-install
           create_export: true
+        - name: cnrs-fetch-0
+          namespace: tap-install
+          create_export: true
       overlay_secrets:
         - name: workload-git-auth-overlay
           namespace: tap-install
