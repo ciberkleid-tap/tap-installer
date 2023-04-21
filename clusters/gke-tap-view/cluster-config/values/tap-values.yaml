@@ -22,6 +22,8 @@ tap_install:
             - type: url
               target: https://github.com/ciberkleid-tap/tap-catalog/blob/main/catalog-info.yaml
             - type: url
+              target: https://github.com/ciberkleid-tap/yelb-catalog/blob/main/catalog-info.yaml
+            - type: url
               target: https://github.com/ciberkleid-tap/tanzu-java-web-app/blob/main/catalog/catalog-info.yaml
 
         # kubernetes:
