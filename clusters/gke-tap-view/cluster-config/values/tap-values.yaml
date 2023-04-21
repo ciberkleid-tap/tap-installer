@@ -31,21 +31,7 @@ tap_install:
               target: https://github.com/ciberkleid-tap/tanzu-java-web-app/blob/main/catalog/catalog-info.yaml
 
         # kubernetes:
-        #   serviceLocatorMethod:
-        #     type: 'multiTenant'
-        #   clusterLocatorMethods:
-        #     - type: 'config'
-        #       clusters:
-        #         - url: CLUSTER-URL
-        #           name: CLUSTER-NAME # Build profile cluster can go here.
-        #           authProvider: serviceAccount
-        #           serviceAccountToken: CLUSTER-TOKEN
-        #           skipTLSVerify: TRUE-OR-FALSE-VALUE
-        #         - url: CLUSTER-URL
-        #           name: CLUSTER-NAME # Run profile cluster can go here.
-        #           authProvider: serviceAccount
-        #           serviceAccountToken: CLUSTER-TOKEN
-        #           skipTLSVerify: TRUE-OR-FALSE-VALUE
+        # See tap-sensitive-values.sops.yaml
 
     appliveview:
       ingressEnabled: true
