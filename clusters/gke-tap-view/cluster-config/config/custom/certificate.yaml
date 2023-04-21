@@ -1,29 +1,44 @@
+# apiVersion: cert-manager.io/v1
+# kind: ClusterIssuer
+# metadata:
+#   name: letsencrypt-http01-issuer
+#   namespace: cert-manager
+# spec:
+#   acme:
+#     server: https://acme-v02.api.letsencrypt.org/directory
+#     email: ciberkleid@vmware.com
+#     privateKeySecretRef:
+#       name: letsencrypt-http01-issuer
+#     solvers:
+#     - http01:
+#         ingress:
+#           class: contour
+# ---
+# apiVersion: cert-manager.io/v1
+# kind: Certificate
+# metadata:
+#   namespace: cert-manager
+#   name: tap-gui
+# spec:
+#   commonName: tap-gui.view.tap-demo.coraiberkleid.net
+#   dnsNames:
+#     - tap-gui.view.tap-demo.coraiberkleid.net
+#   issuerRef:
+#     name: letsencrypt-http01-issuer
+#     kind: ClusterIssuer
+#   secretName: tap-gui
+# ---
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
-  name: letsencrypt-http01-issuer
-  namespace: cert-manager
+  name: letsencrypt-production
 spec:
   acme:
-    server: https://acme-v02.api.letsencrypt.org/directory
     email: ciberkleid@vmware.com
     privateKeySecretRef:
-      name: letsencrypt-http01-issuer
+      name: letsencrypt-production
+    server: https://acme-v02.api.letsencrypt.org/directory
     solvers:
-    - http01:
-        ingress:
-          class: contour
----
-apiVersion: cert-manager.io/v1
-kind: Certificate
-metadata:
-  namespace: cert-manager
-  name: tap-gui
-spec:
-  commonName: tap-gui.view.tap-demo.coraiberkleid.net
-  dnsNames:
-    - tap-gui.view.tap-demo.coraiberkleid.net
-  issuerRef:
-    name: letsencrypt-http01-issuer
-    kind: ClusterIssuer
-  secretName: tap-gui
+      - http01:
+          ingress:
+            class: contour
