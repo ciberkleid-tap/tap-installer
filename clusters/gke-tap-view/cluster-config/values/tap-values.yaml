@@ -16,6 +16,9 @@ tap_install:
     tap_gui:
       ingressEnabled: true
       service_type: ClusterIP
+      tls:
+        namespace: cert-manager
+        secretName: tap-gui
       app_config:
         catalog:
           locations:
