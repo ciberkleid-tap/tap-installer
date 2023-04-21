@@ -6,8 +6,8 @@ tap_install:
 
     shared:
       ingress_domain: "view.tap-demo.coraiberkleid.net"
-      #ingress_issuer: ""
-      ingress_issuer: letsencrypt-production
+      ingress_issuer: ""
+      #ingress_issuer: letsencrypt-production
 
     contour:
       envoy:
