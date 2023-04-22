@@ -38,6 +38,9 @@ tap_install:
 
     appliveview:
       ingressEnabled: true
+      tls:
+        namespace: contour-tls
+        secretName: tls
     
     accelerator:
       ingress:
