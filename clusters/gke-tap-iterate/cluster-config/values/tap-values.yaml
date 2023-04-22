@@ -38,6 +38,7 @@ tap_install:
 
     cnrs:
       # domain_name: "TAP-ITERATE-CNRS-DOMAIN" # Optional if the shared.ingress_domain is provided.
+      ingress_issuer: ""
       default_tls_secret: contour-tls/tls
       domain_template: "{{.Name}}-{{.Namespace}}.{{.Domain}}"
 
