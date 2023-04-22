@@ -20,6 +20,9 @@ tap_install:
       # tls:
       #   namespace: cert-manager
       #   secretName: tap-gui
+      tls:
+        namespace: contour-tls
+        secretName: tls
       app_config:
         catalog:
           locations:
