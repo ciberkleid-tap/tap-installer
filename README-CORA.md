@@ -46,7 +46,7 @@ kubectl create secret docker-registry -n tap-install --dry-run=client registry-c
 ```
 
 # Create git-ssh secret
-https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.5/tap/scc-git-auth.html?hWord=N4IghgNiBcIM5wBYgL5A
+https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.5/tap/scc-git-auth.html?hWord=N4IghgNiBcIM5wBYgL5Agit
 
 ### TLS Setup
 
@@ -89,4 +89,6 @@ metadata:
       ingress_domain: "view.tap-demo.coraiberkleid.net"
       ingress_issuer: ""
 ```
+
+6. Add tls configuration to cnrs on runtime clusters and accelerator and appliveview on view cluster
 
