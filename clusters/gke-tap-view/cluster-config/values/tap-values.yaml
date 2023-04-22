@@ -38,5 +38,13 @@ tap_install:
 
     appliveview:
       ingressEnabled: true
+    
+    accelerator:
+      ingress:
+        include: true
+        enable_tls: true
+      tls:
+        namespace: contour-tls
+        secret_name: tls
 
   # Might need to tell GUI to access Grype metadata store on build cluster
