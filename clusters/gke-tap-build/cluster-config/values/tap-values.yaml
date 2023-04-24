@@ -1,46 +1,52 @@
 ---
 tap_install:
   values:
-    profile: build
-    ceip_policy_disclosed: true # Installation fails if this is not set to true. Not a string.
+    profile: full
+    excluded_packages:
+      - learningcenter.tanzu.vmware.com
+      - workshops.learningcenter.tanzu.vmware.com
+    ceip_policy_disclosed: true # Installation fails if this is set to 'false'
 
     shared:
-      ingress_domain: "build.tap-demo.coraiberkleid.net"
+      ingress_domain: build.tap-demo.coraiberkleid.net
       ingress_issuer: ""
       image_registry:
-        project_path: "gcr.io/fe-ciberkleid/tap-demo" # To be used by Build Service by appending "/buildservice" and used by Supply chain by appending "/workloads".
-
-    # The above shared keys can be overridden in the below section.
+        project_path: gcr.io/fe-ciberkleid/tap-demo
+      activateAppLiveViewSecureAccessControl: false
 
     buildservice:
-    # Takes the value from the shared section by default, but can be overridden by setting a different value.
-      # kp_default_repository: "KP-DEFAULT-REPO"
-      # kp_default_repository_secret:
-      #   name: "KP-DEFAULT-REPO-SECRET"
-      #   namespace: "KP-DEFAULT-REPO-SECRET-NAMESPACE"
+     #  kp_default_repository: "gcr.io/fe-cpage/build"
+
+    accelerator:
+      ingress:
+        include: true
+        enable_tls: true
+      tls:
+        namespace: contour-tls
+        secret_name: tls
+      #domain: build.tap-demo.coraiberkleid.net
+      samples:
+        include: true
+
+    appliveview:
+      ingressEnabled: true
+      tls:
+        namespace: contour-tls
+        secretName: tls
+
     supply_chain: testing_scanning
-    ootb_supply_chain_testing_scanning: # Optional if the corresponding shared keys are provided.
-      # registry:
-      #   server: "SERVER-NAME"
-      #   repository: "REPO-NAME"
+
+    ootb_supply_chain_testing_scanning:
+     #  registry:
+     #    server: "gcr.io/fe-cpage"
+     #    repository: "tap/supply-chain"
       gitops:
-        ssh_secret: "git-ssh" # (Optional) Defaults to "".
-    grype:
-      namespace: "default" # (Optional) Defaults to default namespace.
-      targetImagePullSecret: "registry-credentials"
-      metadataStore:
-        url: https://metadata-store.view.tap-demo.coraiberkleid.net
-        caSecret:
-            name: store-ca-cert
-            importFromNamespace: metadata-store-secrets
-        authSecret:
-            name: store-auth-token
-            importFromNamespace: metadata-store-secrets
-    scanning:
-      metadataStore: {} # Deactivate Supply Chain Security Tools - Store integration.
-      # metadataStore: 
-      #   url: "" # Deactivate the Supply Chain Security Tools - Store integration.
-        
+        ssh_secret: git-ssh
+        username: ciberkleid
+        branch: main
+        commit_message: "Update from TAP Supply Chain Choreographer"
+        email: ciberkleid@vmware.com
+        repository_prefix: ssh://git@github.com/ciberkleid-tap/
 
     namespace_provisioner:
       controller: false
@@ -62,3 +68,134 @@ tap_install:
         - name: workload-git-auth-overlay
           namespace: tap-install
           create_export: true
+
+    contour:
+      envoy:
+        service:
+          type: LoadBalancer
+
+    cnrs:
+      default_tls_secret: contour-tls/tls
+      domain_template: "{{.Name}}-{{.Namespace}}.{{.Domain}}"
+
+    tap_gui:
+      service_type: ClusterIP
+      ingressEnabled: "true"
+      tls:
+        namespace: contour-tls
+        secretName: tls
+      app_config:
+        app:
+          baseUrl: https://tap-gui.build.tap-demo.coraiberkleid.net
+        catalog:
+            locations:
+            - type: url
+              target: https://github.com/ciberkleid-tap/tap-catalog/blob/main/catalog-info.yaml
+            - type: url
+              target: https://github.com/ciberkleid-tap/yelb-catalog/blob/main/catalog-info.yaml
+            - type: url
+              target: https://github.com/ciberkleid-tap/tanzu-java-web-app/blob/main/catalog/catalog-info.yaml
+        backend:
+          baseUrl: https://tap-gui.build.tap-demo.coraiberkleid.net
+          cors:
+            origin: https://tap-gui.build.tap-demo.coraiberkleid.net
+        proxy:
+          /metadata-store:
+            target: https://metadata-store-app.metadata-store:8443/api/v1
+            changeOrigin: true
+            secure: false
+        # kubernetes:
+        # See tap-sensitive-values.sops.yaml
+
+        # techdocs:
+        #   builder: 'external'
+        #   publisher:
+        #      type: 'awsS3'
+        #      awsS3:
+        #        bucketName: e2e-tap-techdocs
+        #        credentials:
+        #         roleArn: arn:aws:iam::377668981663:role/ReadTapTechdocs
+
+    metadata_store:
+      app_service_type: ClusterIP # (optional) Defaults to LoadBalancer. Change to NodePort for distributions that don't support LoadBalancer
+      ns_for_export_app_cert: "*"
+
+    scanning:
+      metadataStore:
+        url: "" # Disable embedded integration since it's deprecated
+
+    grype:
+      namespace: "default" # (optional) Defaults to default namespace.
+      targetImagePullSecret: "registry-credentials"
+
+
+
+
+
+
+
+
+# ---
+# tap_install:
+#   values:
+#     profile: build
+#     ceip_policy_disclosed: true # Installation fails if this is not set to true. Not a string.
+
+#     shared:
+#       ingress_domain: "build.tap-demo.coraiberkleid.net"
+#       ingress_issuer: ""
+#       image_registry:
+#         project_path: "gcr.io/fe-ciberkleid/tap-demo" # To be used by Build Service by appending "/buildservice" and used by Supply chain by appending "/workloads".
+
+#     # The above shared keys can be overridden in the below section.
+
+#     buildservice:
+#     # Takes the value from the shared section by default, but can be overridden by setting a different value.
+#       # kp_default_repository: "KP-DEFAULT-REPO"
+#       # kp_default_repository_secret:
+#       #   name: "KP-DEFAULT-REPO-SECRET"
+#       #   namespace: "KP-DEFAULT-REPO-SECRET-NAMESPACE"
+#     supply_chain: testing_scanning
+#     ootb_supply_chain_testing_scanning: # Optional if the corresponding shared keys are provided.
+#       # registry:
+#       #   server: "SERVER-NAME"
+#       #   repository: "REPO-NAME"
+#       gitops:
+#         ssh_secret: "git-ssh" # (Optional) Defaults to "".
+#     grype:
+#       namespace: "default" # (Optional) Defaults to default namespace.
+#       targetImagePullSecret: "registry-credentials"
+#       metadataStore:
+#         url: https://metadata-store.view.tap-demo.coraiberkleid.net
+#         caSecret:
+#             name: store-ca-cert
+#             importFromNamespace: metadata-store-secrets
+#         authSecret:
+#             name: store-auth-token
+#             importFromNamespace: metadata-store-secrets
+#     scanning:
+#       metadataStore: {} # Deactivate Supply Chain Security Tools - Store integration.
+#       # metadataStore: 
+#       #   url: "" # Deactivate the Supply Chain Security Tools - Store integration.
+        
+
+    # namespace_provisioner:
+    #   controller: false
+    #   gitops_install:
+    #     url: https://github.com/ciberkleid-tap/tap-installer
+    #     ref: origin/main
+    #     subPath: clusters/gke-tap-build/cluster-config/namespace-provisioner/namespaces
+    #   additional_sources:
+    #     - git:
+    #         url: https://github.com/ciberkleid-tap/tap-installer
+    #         ref: origin/main
+    #         subPath: clusters/gke-tap-build/cluster-config/namespace-provisioner/namespace-resources
+    #       path: _ytt_lib/namespace-resources
+    #   import_data_values_secrets:
+    #     - name: workload-git-auth
+    #       namespace: tap-install
+    #       create_export: true
+    #   overlay_secrets:
+    #     - name: workload-git-auth-overlay
+    #       namespace: tap-install
+    #       create_export: true
