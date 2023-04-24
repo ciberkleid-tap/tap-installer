@@ -28,9 +28,19 @@ tap_install:
     grype:
       namespace: "default" # (Optional) Defaults to default namespace.
       targetImagePullSecret: "registry-credentials"
+      metadataStore:
+        url: https://metadata-store.view.tap-demo.coraiberkleid.net
+        caSecret:
+            name: store-ca-cert
+            importFromNamespace: metadata-store-secrets
+        authSecret:
+            name: store-auth-token
+            importFromNamespace: metadata-store-secrets
     scanning:
-      metadataStore: 
-        url: "" # Deactivate the Supply Chain Security Tools - Store integration.
+      metadataStore: {} # Deactivate Supply Chain Security Tools - Store integration.
+      # metadataStore: 
+      #   url: "" # Deactivate the Supply Chain Security Tools - Store integration.
+        
 
     namespace_provisioner:
       controller: false
