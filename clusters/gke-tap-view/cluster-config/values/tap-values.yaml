@@ -17,6 +17,7 @@ tap_install:
     tap_gui:
       ingressEnabled: true
       service_type: ClusterIP
+      metadataStoreAutoconfiguration: true # Create a service account, the Kubernetes control plane token and the requisite app_config block to enable communications between Tanzu Application Platform GUI and SCST - Store.
       # tls:
       #   namespace: cert-manager
       #   secretName: tap-gui
