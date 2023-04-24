@@ -46,7 +46,7 @@ tap_install:
       backend:
         sslDeactivated: false
         ingressEnabled: true
-        host: appliveview.view.tap-demo.coraiberkleid.net
+        host: appliveview.build.tap-demo.coraiberkleid.net
 
     namespace_provisioner:
       controller: false
