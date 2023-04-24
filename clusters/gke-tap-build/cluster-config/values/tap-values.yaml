@@ -41,12 +41,16 @@ tap_install:
      #    server: "gcr.io/fe-cpage"
      #    repository: "tap/supply-chain"
       gitops:
-        ssh_secret: git-ssh
+        server_address: ssh://git@github.com
+        repository_owner: ciberkleid-tap
+        repository_name: tap-workload-gitops
         username: ciberkleid
         branch: main
         commit_message: "Update from TAP Supply Chain Choreographer"
         email: ciberkleid@vmware.com
-        repository_prefix: ssh://git@github.com/ciberkleid-tap/
+        ssh_secret: git-ssh
+        #commit_strategy: "pull request"     # Specification of how commits are made to the branch; directly or through a pull request.
+        #repository_prefix: ssh://git@github.com/ciberkleid-tap/    # DEPRECATED
 
     namespace_provisioner:
       controller: false
