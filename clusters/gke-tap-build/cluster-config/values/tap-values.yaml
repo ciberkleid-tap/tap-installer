@@ -15,7 +15,7 @@ tap_install:
       activateAppLiveViewSecureAccessControl: false
 
     buildservice:
-     #  kp_default_repository: "gcr.io/fe-cpage/build"
+     #  kp_default_repository: "gcr.io/fe-ciberkleid/tap-demo/buildservice"
 
     accelerator:
       ingress:
@@ -38,10 +38,10 @@ tap_install:
 
     ootb_supply_chain_testing_scanning:
      #  registry:
-     #    server: "gcr.io/fe-cpage"
-     #    repository: "tap/supply-chain"
+     #    server: "gcr.io/fe-ciberkleid"
+     #    repository: "tap-demo/workloads"
       gitops:
-        server_address: ssh://git@github.com
+        server_address: ssh://git@github.com/
         repository_owner: ciberkleid-tap
         repository_name: tap-workload-gitops
         username: ciberkleid
@@ -49,8 +49,7 @@ tap_install:
         commit_message: "Update from TAP Supply Chain Choreographer"
         email: ciberkleid@vmware.com
         ssh_secret: git-ssh
-        # commit_strategy: direct
-        commit_strategy: pull_request
+        commit_strategy: pull_request     # Default value: direct
         pull_request:
           server_kind: github
           commit_branch: review
