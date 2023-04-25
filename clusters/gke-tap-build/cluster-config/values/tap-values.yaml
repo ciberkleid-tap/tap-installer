@@ -39,16 +39,17 @@ tap_install:
     ootb_supply_chain_testing_scanning:
      #  registry:
      #    server: "gcr.io/fe-ciberkleid"
-     #    repository: "tap-demo/workloads"
+     #    repository: "tap-demo/workloads"    
       gitops:
-        server_address: ssh://git@github.com/
+        #server_address: ssh://git@github.com/
+        server_address: https://github.com/
         repository_owner: ciberkleid-tap
         repository_name: tap-workload-gitops
         username: ciberkleid
         branch: main
         commit_message: "Update from TAP Supply Chain Choreographer"
         email: ciberkleid@vmware.com
-        ssh_secret: git-ssh
+        ssh_secret: git-https
         commit_strategy: pull_request     # Default value: direct
         pull_request:
           server_kind: github
@@ -72,8 +73,14 @@ tap_install:
         - name: workload-git-auth
           namespace: tap-install
           create_export: true
+        - name: workload-gitops-auth
+          namespace: tap-install
+          create_export: true
       overlay_secrets:
         - name: workload-git-auth-overlay
+          namespace: tap-install
+          create_export: true
+        - name: workload-gitops-auth-overlay
           namespace: tap-install
           create_export: true
 
