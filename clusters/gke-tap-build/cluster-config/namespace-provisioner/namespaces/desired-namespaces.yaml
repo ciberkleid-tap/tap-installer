@@ -1,5 +1,4 @@
 #@data/values
 ---
 namespaces:
-  - name: demo-apps2
-  - name: demo-apps3
+  - name: demo-apps
