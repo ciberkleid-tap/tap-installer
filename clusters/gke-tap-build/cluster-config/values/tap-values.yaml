@@ -70,20 +70,20 @@ tap_install:
             ref: origin/main
             subPath: clusters/gke-tap-build/cluster-config/namespace-provisioner/namespace-resources
           path: _ytt_lib/namespace-resources
-      import_data_values_secrets:
-        - name: workload-git-auth
-          namespace: tap-install
-          create_export: true
-        - name: workload-gitops-auth
-          namespace: tap-install
-          create_export: true
+      # import_data_values_secrets:
+      #   - name: workload-git-auth
+      #     namespace: tap-install
+      #     create_export: true
+      #   - name: workload-gitops-auth
+      #     namespace: tap-install
+      #     create_export: true
       overlay_secrets:
-        - name: workload-git-auth-overlay
-          namespace: tap-install
-          create_export: true
-        - name: workload-gitops-auth-overlay
-          namespace: tap-install
-          create_export: true
+        - name: serviceaccount-overlay-git-ssh
+          #namespace: tap-install
+          #create_export: true
+        - name: serviceaccount-overlay-git-https
+          #namespace: tap-install
+          #create_export: true
 
     contour:
       envoy:
