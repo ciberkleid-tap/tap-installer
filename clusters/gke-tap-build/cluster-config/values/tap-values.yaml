@@ -80,10 +80,10 @@ tap_install:
       overlay_secrets:
         - name: serviceaccount-overlay-git-ssh
           namespace: tap-install
-          #create_export: true
+          create_export: true
         - name: serviceaccount-overlay-git-https
           namespace: tap-install
-          #create_export: true
+          create_export: true
 
     contour:
       envoy:
