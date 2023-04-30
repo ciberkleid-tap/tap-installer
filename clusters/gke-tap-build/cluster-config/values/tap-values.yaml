@@ -42,16 +42,16 @@ tap_install:
      #    server: "gcr.io/fe-ciberkleid"
      #    repository: "tap-demo/workloads"    
       gitops:
-        server_address: ssh://git@github.com/
-        #server_address: https://github.com/
+        #server_address: ssh://git@github.com/
+        server_address: https://github.com/
         repository_owner: ciberkleid-tap
         repository_name: tap-workload-gitops
         username: ciberkleid
         branch: main
         commit_message: "Update from TAP Supply Chain Choreographer"
         email: ciberkleid@vmware.com
-        ssh_secret: git-ssh
-        #ssh_secret: git-https
+        #ssh_secret: git-ssh
+        ssh_secret: git-https
         commit_strategy: pull_request     # Default value: direct
         pull_request:
           server_kind: github
