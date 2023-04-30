@@ -71,10 +71,10 @@ tap_install:
             subPath: clusters/gke-tap-build/cluster-config/namespace-provisioner/namespace-resources
           path: _ytt_lib/namespace-resources
       import_data_values_secrets:
-        # - name: git-ssh-secret
+        # - name: git-ssh
         #   namespace: tap-install
         #   create_export: true
-        - name: git-https-secret
+        - name: git-https
           namespace: tap-install
           create_export: true
       overlay_secrets:
