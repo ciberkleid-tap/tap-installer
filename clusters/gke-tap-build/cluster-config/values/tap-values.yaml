@@ -13,7 +13,7 @@ tap_install:
       ingress_issuer: ""
       image_registry:
         project_path: gcr.io/fe-ciberkleid/tap-demo
-      activateAppLiveViewSecureAccessControl: false
+      # activateAppLiveViewSecureAccessControl: false
 
     buildservice:
      #  kp_default_repository: "gcr.io/fe-ciberkleid/tap-demo/buildservice"
