@@ -2,3 +2,5 @@
 ---
 namespaces:
   - name: dev
+  - name: mgb-dev
+  - name: mgb-apps
