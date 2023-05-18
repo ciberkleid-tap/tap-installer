@@ -2,5 +2,7 @@
 ---
 namespaces:
   - name: demo-apps
+  - name: wfd-apps
+  - name: wfd-services
   - name: mgb-dev
   - name: mgb-apps
