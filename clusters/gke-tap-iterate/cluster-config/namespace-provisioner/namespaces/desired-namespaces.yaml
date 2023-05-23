@@ -2,5 +2,7 @@
 ---
 namespaces:
   - name: dev
+  - name: wfd-apps
+  - name: wfd-services
   - name: mgb-dev
   - name: mgb-apps
