@@ -112,10 +112,17 @@ tap_install:
               target: https://github.com/ciberkleid-tap/yelb-catalog/blob/main/catalog-info.yaml
             - type: url
               target: https://github.com/ciberkleid-tap/tanzu-java-web-app/blob/main/catalog/catalog-info.yaml
+            - type: url
+              target: https://github.com/ciberkleid-tap/where-for-dinner/blob/main/catalog/catalog-info.yaml
         backend:
           baseUrl: https://tap-gui.build.tap-demo.coraiberkleid.net
           cors:
             origin: https://tap-gui.build.tap-demo.coraiberkleid.net
+          reading:
+            allow:
+              - host: '*.iterate.tap-demo.coraiberkleid.net'
+              - host: '*.run-primary.tap-demo.coraiberkleid.net'
+              - host: '*.run-secondary.tap-demo.coraiberkleid.net'
         proxy:
           /metadata-store:
             target: https://metadata-store-app.metadata-store:8443/api/v1
