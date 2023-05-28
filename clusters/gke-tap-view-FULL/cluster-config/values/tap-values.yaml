@@ -1,0 +1,161 @@
+---
+tap_install:
+  values:
+    profile: full
+    ceip_policy_disclosed: true # Installation fails if this is not set to true. Not a string.
+
+    shared:
+      ingress_domain: "view.tap-demo.coraiberkleid.net"
+      ingress_issuer: ""
+      #ingress_issuer: letsencrypt-production
+
+      # image_registry:
+      #   project_path: "SERVER-NAME/REPO-NAME"
+      #   secret:
+      #     name: "KP-DEFAULT-REPO-SECRET"
+      #     namespace: "KP-DEFAULT-REPO-SECRET-NAMESPACE"
+
+      # kubernetes_distribution: "K8S-DISTRO" # Only required if the distribution is OpenShift and must be used with the following kubernetes_version key.
+
+      # kubernetes_version: "K8S-VERSION" # Required regardless of distribution when Kubernetes version is 1.25 or later.
+
+      # ca_cert_data: | # To be passed if using custom certificates.
+      #     -----BEGIN CERTIFICATE-----
+      #     MIIFXzCCA0egAwIBAgIJAJYm37SFocjlMA0GCSqGSIb3DQEBDQUAMEY...
+      #     -----END CERTIFICATE-----
+
+    contour:
+      envoy:
+        service:
+          type: LoadBalancer # NodePort can be used if your Kubernetes cluster doesn't support LoadBalancing.
+
+    tap_gui:
+      ingressEnabled: true
+      service_type: ClusterIP
+      metadataStoreAutoconfiguration: true # Creates a service account, the Kubernetes control plane token and the requisite app_config block to enable communications between Tanzu Application Platform GUI and SCST - Store.
+      # tls:
+      #   namespace: cert-manager
+      #   secretName: tap-gui
+      tls:
+        namespace: contour-tls
+        secretName: tls
+      app_config:
+        catalog:
+          locations:
+            - type: url
+              target: https://github.com/ciberkleid-tap/tap-catalog/blob/main/catalog-info.yaml
+            - type: url
+              target: https://github.com/ciberkleid-tap/yelb-catalog/blob/main/catalog-info.yaml
+            - type: url
+              target: https://github.com/ciberkleid-tap/tanzu-java-web-app/blob/main/catalog/catalog-info.yaml
+        # kubernetes:
+        # See tap-sensitive-values.sops.yaml
+
+    appliveview:
+      ingressEnabled: true
+      tls:
+        namespace: contour-tls
+        secretName: tls
+    
+    accelerator:
+      ingress:
+        include: true
+        enable_tls: true
+      tls:
+        namespace: contour-tls
+        secret_name: tls
+
+  # Might need to tell GUI to access Grype metadata store on build cluster
+
+    supply_chain: basic # Can take testing, testing_scanning.
+
+    ootb_supply_chain_basic: # Based on supply_chain set above, can be changed to ootb_supply_chain_testing, ootb_supply_chain_testing_scanning.
+      registry:
+        server: "SERVER-NAME" # Takes the value from the shared section by default, but can be overridden by setting a different value.
+        repository: "REPO-NAME" # Takes the value from the shared section by default, but can be overridden by setting a different value.
+      gitops:
+        ssh_secret: "SSH-SECRET-KEY" # Takes "" as value by default; but can be overridden by setting a different value.
+
+
+    buildservice:
+      # Takes the value from the shared section by default, but can be overridden by setting a different value.
+      kp_default_repository: "KP-DEFAULT-REPO"
+      kp_default_repository_secret: # Takes the value from the shared section above by default, but can be overridden by setting a different value.
+        name: "KP-DEFAULT-REPO-SECRET"
+        namespace: "KP-DEFAULT-REPO-SECRET-NAMESPACE"
+
+
+    metadata_store:
+      ns_for_export_app_cert: "MY-DEV-NAMESPACE" # Verify this namespace is available within your cluster before initiating the Tanzu Application Platform installation.
+      app_service_type: ClusterIP # Defaults to LoadBalancer. If shared.ingress_domain is set earlier, this must be set to ClusterIP.
+
+    scanning:
+      metadataStore:
+        url: "" # Configuration is moved, so set this string to empty.
+
+    grype:
+      namespace: "MY-DEV-NAMESPACE" # Verify this namespace is available within your cluster before initiating the Tanzu Application Platform installation.
+      targetImagePullSecret: "TARGET-REGISTRY-CREDENTIALS-SECRET"
+      # In a single cluster, the connection between the scanning pod and the metadata store happens inside the cluster and does not pass through ingress. This is automatically configured, you do not need to provide an ingress connection to the store.
+
+    policy:
+      tuf_enabled: false # By default, TUF initialization and keyless verification are deactivated.
+    tap_telemetry:
+      customer_entitlement_account_number: "CUSTOMER-ENTITLEMENT-ACCOUNT-NUMBER" # (Optional) Identify data for creating the Tanzu Application Platform usage reports.
+
+
+
+# ---
+# tap_install:
+#   values:
+#     profile: view
+#     ceip_policy_disclosed: true # Installation fails if this is not set to true. Not a string.
+
+#     shared:
+#       ingress_domain: "view.tap-demo.coraiberkleid.net"
+#       ingress_issuer: ""
+#       #ingress_issuer: letsencrypt-production
+
+#     contour:
+#       envoy:
+#         service:
+#           type: LoadBalancer # NodePort can be used if your Kubernetes cluster doesn't support LoadBalancing.
+
+  #   tap_gui:
+  #     ingressEnabled: true
+  #     service_type: ClusterIP
+  #     metadataStoreAutoconfiguration: true # Create a service account, the Kubernetes control plane token and the requisite app_config block to enable communications between Tanzu Application Platform GUI and SCST - Store.
+  #     # tls:
+  #     #   namespace: cert-manager
+  #     #   secretName: tap-gui
+  #     tls:
+  #       namespace: contour-tls
+  #       secretName: tls
+  #     app_config:
+  #       catalog:
+  #         locations:
+  #           - type: url
+  #             target: https://github.com/ciberkleid-tap/tap-catalog/blob/main/catalog-info.yaml
+  #           - type: url
+  #             target: https://github.com/ciberkleid-tap/yelb-catalog/blob/main/catalog-info.yaml
+  #           - type: url
+  #             target: https://github.com/ciberkleid-tap/tanzu-java-web-app/blob/main/catalog/catalog-info.yaml
+
+  #       # kubernetes:
+  #       # See tap-sensitive-values.sops.yaml
+
+  #   appliveview:
+  #     ingressEnabled: true
+  #     tls:
+  #       namespace: contour-tls
+  #       secretName: tls
+    
+  #   accelerator:
+  #     ingress:
+  #       include: true
+  #       enable_tls: true
+  #     tls:
+  #       namespace: contour-tls
+  #       secret_name: tls
+
+  # # Might need to tell GUI to access Grype metadata store on build cluster
