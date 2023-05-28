@@ -9,7 +9,7 @@ tap_install:
     ceip_policy_disclosed: true # Installation fails if this is not set to true. Not a string.
 
     shared:
-      ingress_domain: "view.tap-demo.coraiberkleid.net"
+      ingress_domain: "full.tap-demo.coraiberkleid.net"
       ingress_issuer: ""
       #ingress_issuer: letsencrypt-production
       image_registry:
@@ -50,7 +50,7 @@ tap_install:
         secretName: tls
       app_config:
         app:
-          baseUrl: https://tap-gui.view.tap-demo.coraiberkleid.net
+          baseUrl: https://tap-gui.full.tap-demo.coraiberkleid.net
         catalog:
           locations:
             - type: url
@@ -62,9 +62,9 @@ tap_install:
             - type: url
               target: https://github.com/ciberkleid-tap/where-for-dinner/blob/main/catalog/catalog-info.yaml
         backend:
-          baseUrl: https://tap-gui.view.tap-demo.coraiberkleid.net
+          baseUrl: https://tap-gui.full.tap-demo.coraiberkleid.net
           cors:
-            origin: https://tap-gui.view.tap-demo.coraiberkleid.net
+            origin: https://tap-gui.full.tap-demo.coraiberkleid.net
           # reading:
           #   allow:
           #     - host: '*.iterate.tap-demo.coraiberkleid.net'
@@ -104,7 +104,7 @@ tap_install:
       tls:
         namespace: contour-tls
         secret_name: tls
-      #domain: view.tap-demo.coraiberkleid.net
+      #domain: full.tap-demo.coraiberkleid.net
       samples:
         include: true
 
@@ -186,11 +186,10 @@ tap_install:
       targetImagePullSecret: "registry-credentials"
       # In a single cluster, the connection between the scanning pod and the metadata store happens inside the cluster and does not pass through ingress. This is automatically configured, you do not need to provide an ingress connection to the store.
 
-    policy:
-      tuf_enabled: false # By default, TUF initialization and keyless verification are deactivated.
-    tap_telemetry:
-      customer_entitlement_account_number: "CUSTOMER-ENTITLEMENT-ACCOUNT-NUMBER" # (Optional) Identify data for creating the Tanzu Application Platform usage reports.
-
+    # policy:
+    #   tuf_enabled: false # By default, TUF initialization and keyless verification are deactivated.
+    # tap_telemetry:
+    #   customer_entitlement_account_number: "CUSTOMER-ENTITLEMENT-ACCOUNT-NUMBER" # (Optional) Identify data for creating the Tanzu Application Platform usage reports.
 
 
 # ---
