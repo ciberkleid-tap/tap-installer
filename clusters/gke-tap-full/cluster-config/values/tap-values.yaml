@@ -5,6 +5,7 @@ tap_install:
     excluded_packages:
       - learningcenter.tanzu.vmware.com
       - workshops.learningcenter.tanzu.vmware.com
+      - buildservice.tanzu.vmware.com
       # - namespace-provisioner.apps.tanzu.vmware.com
     ceip_policy_disclosed: true # Installation fails if this is not set to true. Not a string.
 
@@ -170,12 +171,12 @@ tap_install:
     #     # ssh_secret: "SSH-SECRET-KEY" # Takes "" as value by default; but can be overridden by setting a different value.
     #     ssh_secret: git-https
 
-    buildservice:
-      # Takes the value from the shared section by default, but can be overridden by setting a different value.
-      # kp_default_repository: "KP-DEFAULT-REPO"
-      # kp_default_repository_secret: # Takes the value from the shared section above by default, but can be overridden by setting a different value.
-      #   name: "KP-DEFAULT-REPO-SECRET"
-      #   namespace: "KP-DEFAULT-REPO-SECRET-NAMESPACE"
+    # buildservice:
+    #   # Takes the value from the shared section by default, but can be overridden by setting a different value.
+    #   # kp_default_repository: "KP-DEFAULT-REPO"
+    #   # kp_default_repository_secret: # Takes the value from the shared section above by default, but can be overridden by setting a different value.
+    #   #   name: "KP-DEFAULT-REPO-SECRET"
+    #   #   namespace: "KP-DEFAULT-REPO-SECRET-NAMESPACE"
 
     scanning:
       metadataStore:
