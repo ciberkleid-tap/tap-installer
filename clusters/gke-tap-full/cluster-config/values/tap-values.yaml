@@ -159,12 +159,12 @@ tap_install:
       gitops_install:
         url: https://github.com/ciberkleid-tap/tap-installer
         ref: origin/main
-        subPath: clusters/gke-tap-build/cluster-config/namespace-provisioner/namespaces
+        subPath: clusters/gke-tap-full/cluster-config/namespace-provisioner/namespaces
       additional_sources:
         - git:
             url: https://github.com/ciberkleid-tap/tap-installer
             ref: origin/main
-            subPath: clusters/gke-tap-build/cluster-config/namespace-provisioner/namespace-resources
+            subPath: clusters/gke-tap-full/cluster-config/namespace-provisioner/namespace-resources
           path: _ytt_lib/namespace-resources
       import_data_values_secrets:
         - name: git-ssh
@@ -180,8 +180,6 @@ tap_install:
         - name: git-https-serviceaccount-overlay
           namespace: tap-install
           create_export: true
-
-  # Might need to tell GUI to access Grype metadata store on build cluster
 
     #supply_chain: basic # Can take testing, testing_scanning.
     supply_chain: testing_scanning
