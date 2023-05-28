@@ -2,12 +2,19 @@
 tap_install:
   values:
     profile: full
+    excluded_packages:
+      - learningcenter.tanzu.vmware.com
+      - workshops.learningcenter.tanzu.vmware.com
+      # - namespace-provisioner.apps.tanzu.vmware.com
     ceip_policy_disclosed: true # Installation fails if this is not set to true. Not a string.
 
     shared:
-      ingress_domain: "full.tap-demo.coraiberkleid.net"
+      ingress_domain: "view.tap-demo.coraiberkleid.net"
       ingress_issuer: ""
       #ingress_issuer: letsencrypt-production
+      image_registry:
+        project_path: gcr.io/fe-ciberkleid/tap-demo
+      # activateAppLiveViewSecureAccessControl: false
 
       # image_registry:
       #   project_path: "SERVER-NAME/REPO-NAME"
@@ -15,9 +22,7 @@ tap_install:
       #     name: "KP-DEFAULT-REPO-SECRET"
       #     namespace: "KP-DEFAULT-REPO-SECRET-NAMESPACE"
 
-      # kubernetes_distribution: "K8S-DISTRO" # Only required if the distribution is OpenShift and must be used with the following kubernetes_version key.
-
-      # kubernetes_version: "K8S-VERSION" # Required regardless of distribution when Kubernetes version is 1.25 or later.
+      kubernetes_version: "1.24" # Required regardless of distribution when Kubernetes version is 1.25 or later.
 
       # ca_cert_data: | # To be passed if using custom certificates.
       #     -----BEGIN CERTIFICATE-----
@@ -28,6 +33,10 @@ tap_install:
       envoy:
         service:
           type: LoadBalancer # NodePort can be used if your Kubernetes cluster doesn't support LoadBalancing.
+
+    cnrs:
+      default_tls_secret: contour-tls/tls
+      domain_template: "{{.Name}}-{{.Namespace}}.{{.Domain}}"
 
     tap_gui:
       ingressEnabled: true
@@ -40,6 +49,8 @@ tap_install:
         namespace: contour-tls
         secretName: tls
       app_config:
+        app:
+          baseUrl: https://tap-gui.view.tap-demo.coraiberkleid.net
         catalog:
           locations:
             - type: url
@@ -48,8 +59,37 @@ tap_install:
               target: https://github.com/ciberkleid-tap/yelb-catalog/blob/main/catalog-info.yaml
             - type: url
               target: https://github.com/ciberkleid-tap/tanzu-java-web-app/blob/main/catalog/catalog-info.yaml
+            - type: url
+              target: https://github.com/ciberkleid-tap/where-for-dinner/blob/main/catalog/catalog-info.yaml
+        backend:
+          baseUrl: https://tap-gui.view.tap-demo.coraiberkleid.net
+          cors:
+            origin: https://tap-gui.view.tap-demo.coraiberkleid.net
+          # reading:
+          #   allow:
+          #     - host: '*.iterate.tap-demo.coraiberkleid.net'
+          #     - host: '*.run-primary.tap-demo.coraiberkleid.net'
+          #     - host: '*.run-secondary.tap-demo.coraiberkleid.net'
+        proxy:
+          /metadata-store:
+            target: https://metadata-store-app.metadata-store:8443/api/v1
+            changeOrigin: true
+            secure: false
         # kubernetes:
         # See tap-sensitive-values.sops.yaml
+
+        # techdocs:
+        #   builder: 'external'
+        #   publisher:
+        #      type: 'awsS3'
+        #      awsS3:
+        #        bucketName: e2e-tap-techdocs
+        #        credentials:
+        #         roleArn: arn:aws:iam::377668981663:role/ReadTapTechdocs
+
+    metadata_store:
+      app_service_type: ClusterIP # (optional) Defaults to LoadBalancer. Change to NodePort for distributions that don't support LoadBalancer
+      ns_for_export_app_cert: "*"
 
     appliveview:
       ingressEnabled: true
@@ -64,38 +104,86 @@ tap_install:
       tls:
         namespace: contour-tls
         secret_name: tls
+      #domain: view.tap-demo.coraiberkleid.net
+      samples:
+        include: true
+
+    namespace_provisioner:
+      controller: false
+      gitops_install:
+        url: https://github.com/ciberkleid-tap/tap-installer
+        ref: origin/main
+        subPath: clusters/gke-tap-build/cluster-config/namespace-provisioner/namespaces
+      additional_sources:
+        - git:
+            url: https://github.com/ciberkleid-tap/tap-installer
+            ref: origin/main
+            subPath: clusters/gke-tap-build/cluster-config/namespace-provisioner/namespace-resources
+          path: _ytt_lib/namespace-resources
+      import_data_values_secrets:
+        - name: git-ssh
+          namespace: tap-install
+          create_export: true
+        - name: git-https
+          namespace: tap-install
+          create_export: true
+      overlay_secrets:
+        - name: git-ssh-serviceaccount-overlay
+          namespace: tap-install
+          create_export: true
+        - name: git-https-serviceaccount-overlay
+          namespace: tap-install
+          create_export: true
 
   # Might need to tell GUI to access Grype metadata store on build cluster
 
-    supply_chain: basic # Can take testing, testing_scanning.
+    #supply_chain: basic # Can take testing, testing_scanning.
+    supply_chain: testing_scanning
 
-    ootb_supply_chain_basic: # Based on supply_chain set above, can be changed to ootb_supply_chain_testing, ootb_supply_chain_testing_scanning.
-      registry:
-        server: "SERVER-NAME" # Takes the value from the shared section by default, but can be overridden by setting a different value.
-        repository: "REPO-NAME" # Takes the value from the shared section by default, but can be overridden by setting a different value.
+    ootb_supply_chain_testing_scanning:
+     #  registry:
+     #    server: "gcr.io/fe-ciberkleid"
+     #    repository: "tap-demo/workloads"
       gitops:
-        ssh_secret: "SSH-SECRET-KEY" # Takes "" as value by default; but can be overridden by setting a different value.
+        #server_address: ssh://git@github.com/
+        server_address: https://github.com/
+        repository_owner: ciberkleid-tap
+        repository_name: tap-workload-gitops
+        username: ciberkleid
+        branch: main
+        commit_message: "Update from TAP Supply Chain Choreographer"
+        email: ciberkleid@vmware.com
+        #ssh_secret: git-ssh
+        ssh_secret: git-https
+        # commit_strategy: pull_request     # Default value: direct
+        # pull_request:
+        #   server_kind: github
+        #   commit_branch: review
+        #   pull_request_title: "Ready for review"
+        #   pull_request_body: "Generated by TAP Supply Chain Choreographer"
 
+    # ootb_supply_chain_basic: # Based on supply_chain set above, can be changed to ootb_supply_chain_testing, ootb_supply_chain_testing_scanning.
+    #   # registry:
+    #   #   server: "SERVER-NAME" # Takes the value from the shared section by default, but can be overridden by setting a different value.
+    #   #   repository: "REPO-NAME" # Takes the value from the shared section by default, but can be overridden by setting a different value.
+    #   gitops:
+    #     # ssh_secret: "SSH-SECRET-KEY" # Takes "" as value by default; but can be overridden by setting a different value.
+    #     ssh_secret: git-https
 
     buildservice:
       # Takes the value from the shared section by default, but can be overridden by setting a different value.
-      kp_default_repository: "KP-DEFAULT-REPO"
-      kp_default_repository_secret: # Takes the value from the shared section above by default, but can be overridden by setting a different value.
-        name: "KP-DEFAULT-REPO-SECRET"
-        namespace: "KP-DEFAULT-REPO-SECRET-NAMESPACE"
-
-
-    metadata_store:
-      ns_for_export_app_cert: "MY-DEV-NAMESPACE" # Verify this namespace is available within your cluster before initiating the Tanzu Application Platform installation.
-      app_service_type: ClusterIP # Defaults to LoadBalancer. If shared.ingress_domain is set earlier, this must be set to ClusterIP.
+      # kp_default_repository: "KP-DEFAULT-REPO"
+      # kp_default_repository_secret: # Takes the value from the shared section above by default, but can be overridden by setting a different value.
+      #   name: "KP-DEFAULT-REPO-SECRET"
+      #   namespace: "KP-DEFAULT-REPO-SECRET-NAMESPACE"
 
     scanning:
       metadataStore:
         url: "" # Configuration is moved, so set this string to empty.
 
     grype:
-      namespace: "MY-DEV-NAMESPACE" # Verify this namespace is available within your cluster before initiating the Tanzu Application Platform installation.
-      targetImagePullSecret: "TARGET-REGISTRY-CREDENTIALS-SECRET"
+      namespace: "default" # (optional) Defaults to default namespace.
+      targetImagePullSecret: "registry-credentials"
       # In a single cluster, the connection between the scanning pod and the metadata store happens inside the cluster and does not pass through ingress. This is automatically configured, you do not need to provide an ingress connection to the store.
 
     policy:
@@ -112,7 +200,7 @@ tap_install:
 #     ceip_policy_disclosed: true # Installation fails if this is not set to true. Not a string.
 
 #     shared:
-#       ingress_domain: "full.tap-demo.coraiberkleid.net"
+#       ingress_domain: "view.tap-demo.coraiberkleid.net"
 #       ingress_issuer: ""
 #       #ingress_issuer: letsencrypt-production
 
