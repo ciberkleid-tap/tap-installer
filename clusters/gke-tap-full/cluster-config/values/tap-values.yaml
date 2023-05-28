@@ -5,7 +5,7 @@ tap_install:
     ceip_policy_disclosed: true # Installation fails if this is not set to true. Not a string.
 
     shared:
-      ingress_domain: "view.tap-demo.coraiberkleid.net"
+      ingress_domain: "full.tap-demo.coraiberkleid.net"
       ingress_issuer: ""
       #ingress_issuer: letsencrypt-production
 
@@ -112,7 +112,7 @@ tap_install:
 #     ceip_policy_disclosed: true # Installation fails if this is not set to true. Not a string.
 
 #     shared:
-#       ingress_domain: "view.tap-demo.coraiberkleid.net"
+#       ingress_domain: "full.tap-demo.coraiberkleid.net"
 #       ingress_issuer: ""
 #       #ingress_issuer: letsencrypt-production
 
