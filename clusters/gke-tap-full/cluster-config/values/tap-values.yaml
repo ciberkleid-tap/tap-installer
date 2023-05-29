@@ -111,11 +111,15 @@ tap_install:
           baseUrl: https://tap-gui.full.tap-demo.coraiberkleid.net
           cors:
             origin: https://tap-gui.full.tap-demo.coraiberkleid.net
+          reading:
+            allow:
+              - host: '*.full.tap-demo.coraiberkleid.net'
           # reading:
           #   allow:
           #     - host: '*.iterate.tap-demo.coraiberkleid.net'
           #     - host: '*.run-primary.tap-demo.coraiberkleid.net'
           #     - host: '*.run-secondary.tap-demo.coraiberkleid.net'
+
         proxy:
           /metadata-store:
             target: https://metadata-store-app.metadata-store:8443/api/v1
