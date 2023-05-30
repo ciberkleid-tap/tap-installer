@@ -1,0 +1,11 @@
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageRepository
+metadata:
+  name: spring-cloud-gateway-pkgr
+  namespace: tap-install
+  # annotations:
+  #   kapp.k14s.io/change-group: pkgr
+spec:
+  fetch:
+    imgpkgBundle:
+      image: registry.tanzu.vmware.com/spring-cloud-gateway-for-kubernetes/scg-package-repository:2.0.2

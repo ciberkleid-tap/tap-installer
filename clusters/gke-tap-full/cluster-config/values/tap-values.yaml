@@ -75,6 +75,10 @@ tap_install:
       #     MIIFXzCCA0egAwIBAgIJAJYm37SFocjlMA0GCSqGSIb3DQEBDQUAMEY...
       #     -----END CERTIFICATE-----
 
+    spring-cloud-gateway:
+      deployment:
+        namespace: spring-cloud-gateway
+        
     contour:
       envoy:
         service:
