@@ -1,6 +1,7 @@
 #@data/values
 ---
 namespaces:
+  - name: dev
   - name: demo-apps
   - name: wfd-apps
   - name: mgb-dev
