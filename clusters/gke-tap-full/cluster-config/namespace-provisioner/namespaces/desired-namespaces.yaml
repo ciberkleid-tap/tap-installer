@@ -3,4 +3,5 @@
 namespaces:
   - name: dev
   - name: demo-apps
+  - name: demo-apps-prod
   - name: wfd-apps
